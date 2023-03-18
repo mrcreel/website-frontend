@@ -1,0 +1,21 @@
+import Document, { Html, Head, Main, NextScript } from 'next/document'
+
+export default class MyDocument extends Document {
+  render () {
+    return (
+      <Html lang='en'>
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+          <meta
+            name="description"
+            content="Archive of Mississippi prep football"
+          />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
+  }
+}

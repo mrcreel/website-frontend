@@ -1,29 +1,34 @@
 import Link from 'next/link'
-import clientPromise from "../../lib/mongodb"
+import Head from 'next/head'
+
+import Layout from '../../components/layout'
+import clientPromise from '../../lib/mongodb'
+import utilStyles from '../../styles/utils.module.css'
+
 
 export default function Schools ( { schools } ) {
   return (
-    <div>
-      <h1>All Schools</h1>
-      <ul>
+    <Layout>
+      <Head>
+        <title>Schools | MS Prep Football Archive</title>
+      </Head>
+      <h2>All Schools</h2>
+      <ul className={ utilStyles.list }>
         {
           schools.map( ( school, index ) => (
-            <li key={ school._id }>
-              <span>{ `${ index + 1 }) ` }
-                <Link href={ `/schools/${ school.slug }` }>{ school.name }</Link>
-              </span>
+            <li className={ utilStyles.listItem } key={ school._id }>
+              <Link href={ `/schools/${ school.slug }` }>{ school.name }</Link>
             </li>
           ) )
         }
       </ul>
-    </div>
+    </Layout>
   )
 }
 
-export async function getStaticProps () {
+export async function getStaticProps ( req, res ) {
   try {
     const client = await clientPromise
-
     const db = client.db( "rawData" )
 
     const schools = await db
@@ -33,10 +38,10 @@ export async function getStaticProps () {
       .toArray()
 
     return {
-      props: { schools: JSON.parse( JSON.stringify( schools ) ) },
+      props: { schools: JSON.parse( JSON.stringify( schools ) ) }
     }
-
   } catch ( error ) {
     console.error( error )
+    throw new Error( error ).message
   }
 }
